@@ -26,7 +26,8 @@ SECRET_KEY = 'ozo@1plj%&ia7&7lif&g)hk%*f$%+xih*@36uwqibyzdth1vmg'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1'
+    '127.0.0.1',
+    '127.0.0.1:8000',
     'CadDev.pythonanywhere.com'
 ]
 
