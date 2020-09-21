@@ -1,9 +1,7 @@
-from django.http import HttpResponse
 from django.shortcuts import render
 import requests
 from datetime import datetime
-
-
+from django.http import JsonResponse, HttpResponse
 
 def index(request):
 
@@ -27,4 +25,5 @@ def home(request):
       'datetime' : datetime.strptime(list['datetime'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%d-%m-%Y"),
     }]
   dict_list = {'list' : array}
-  return render(request, 'home.html', dict_list)
+  return JsonResponse(dict_list)
+  # return render(request, 'home.html', dict_list)
