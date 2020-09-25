@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^base', TemplateView.as_view(
         template_name='project/base.html'), name='home'),
     path('', include('cova19.urls')),
+    path('api', include('api.urls')),
 ]

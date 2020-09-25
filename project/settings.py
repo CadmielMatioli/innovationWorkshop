@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'cova19.apps.Cova19Config',
+    'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
