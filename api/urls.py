@@ -9,4 +9,5 @@ urlpatterns = [
     path('/brazilperdate/<int:date>', views.brazilPerDate, name='brazilperdate'),
     path('/countries/', views.countries, name='countries'),
     path('/country/<str:country>', views.country, name='country'),
+    path('/prediction', views.prediction, name='prediction'),
 ]
