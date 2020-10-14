@@ -10,4 +10,5 @@ urlpatterns = [
     path('/countries/', views.countries, name='countries'),
     path('/country/<str:country>', views.country, name='country'),
     path('/prediction', views.prediction, name='prediction'),
+    path('/tweets/sentiment', views.tweetSentmentAnalysis, name='tweets'),
 ]

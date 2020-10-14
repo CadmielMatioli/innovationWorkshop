@@ -1,57 +1,65 @@
+from django.core import serializers
 from django.shortcuts import render
 import requests
 from datetime import datetime
 from django.http import JsonResponse, HttpResponse
+from api.models import Tweets
+from .forms import ModelFormTweets
 
 # Create your views here.
+
+
 def states(request):
   response = requests.get('https://covid19-brazil-api.now.sh/api/report/v1')
   states = response.json()
   array = []
   for list in states['data']:
     array += [{
-      'state' : list['state'],
-      'cases' : list['cases'],
-      'deaths' : list['deaths'],
-      'suspects' : list['suspects'],
-      'refuses' : list['refuses'],
-      'datetime' : datetime.strptime(list['datetime'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%d-%m-%Y"),
+      'state': list['state'],
+      'cases': list['cases'],
+      'deaths': list['deaths'],
+      'suspects': list['suspects'],
+      'refuses': list['refuses'],
+      'datetime': datetime.strptime(list['datetime'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%d-%m-%Y"),
     }]
-  dict_list = {'list' : array}
+  dict_list = {'list': array}
   return JsonResponse(dict_list)
 
+
 def state(request, state):
-  response = requests.get('https://covid19-brazil-api.now.sh/api/report/v1/brazil/uf/'+state+'')
+  response = requests.get('https://covid19-brazil-api.now.sh/api/report/v1/brazil/uf/' + state + '')
   state = response.json()
   array = []
   for list in state:
     array = [{
-      'state' : state['state'],
-      'cases' : state['cases'],
-      'deaths' : state['deaths'],
-      'suspects' : state['suspects'],
-      'refuses' : state['refuses'],
-      'datetime' : datetime.strptime(state['datetime'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%d-%m-%Y"),
+      'state': state['state'],
+      'cases': state['cases'],
+      'deaths': state['deaths'],
+      'suspects': state['suspects'],
+      'refuses': state['refuses'],
+      'datetime': datetime.strptime(state['datetime'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%d-%m-%Y"),
     }]
-  dict_list = {'list' : array}
+  dict_list = {'list': array}
   return JsonResponse(dict_list)
 
+
 def brazilPerDate(request, date):
-  date = str(date-1)
-  response = requests.get('https://covid19-brazil-api.now.sh/api/report/v1/brazil/'+date+'')
+  date = str(date - 1)
+  response = requests.get('https://covid19-brazil-api.now.sh/api/report/v1/brazil/' + date + '')
   brazilperdate = response.json()
   array = []
   for list in brazilperdate['data']:
     array += [{
-      'state' : list['state'],
-      'cases' : list['cases'],
-      'deaths' : list['deaths'],
-      'suspects' : list['suspects'],
-      'refuses' : list['refuses'],
-      'datetime' : datetime.strptime(list['datetime'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%d-%m-%Y"),
+      'state': list['state'],
+      'cases': list['cases'],
+      'deaths': list['deaths'],
+      'suspects': list['suspects'],
+      'refuses': list['refuses'],
+      'datetime': datetime.strptime(list['datetime'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%d-%m-%Y"),
     }]
-  dict_list = {'list' : array}
+  dict_list = {'list': array}
   return JsonResponse(dict_list)
+
 
 def countries(request):
   response = requests.get('https://covid19-brazil-api.now.sh/api/report/v1/countries')
@@ -59,30 +67,31 @@ def countries(request):
   array = []
   for list in countries['data']:
     array += [{
-      'country' : list['country'],
-      'cases' : list['cases'],
+      'country': list['country'],
+      'cases': list['cases'],
       'confirmed': list['confirmed'],
-      'deaths' : list['deaths'],
-      'recovered' : list['recovered'],
-      'datetime' : datetime.strptime(list['updated_at'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%d-%m-%Y"),
+      'deaths': list['deaths'],
+      'recovered': list['recovered'],
+      'datetime': datetime.strptime(list['updated_at'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%d-%m-%Y"),
     }]
-  dict_list = {'list' : array}
+  dict_list = {'list': array}
   return JsonResponse(dict_list)
 
+
 def country(request, country):
-  response = requests.get('https://covid19-brazil-api.now.sh/api/report/v1/'+country+'')
+  response = requests.get('https://covid19-brazil-api.now.sh/api/report/v1/' + country + '')
   country = response.json()
   array = []
   for list in country:
     array = [{
-      'country' : country['data']['country'],
-      'cases' : country['data']['cases'],
-      'confirmed' : country['data']['confirmed'],
-      'deaths' : country['data']['deaths'],
-      'recovered' : country['data']['recovered'],
-      'datetime' : datetime.strptime(country['data']['updated_at'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%d-%m-%Y"),
+      'country': country['data']['country'],
+      'cases': country['data']['cases'],
+      'confirmed': country['data']['confirmed'],
+      'deaths': country['data']['deaths'],
+      'recovered': country['data']['recovered'],
+      'datetime': datetime.strptime(country['data']['updated_at'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%d-%m-%Y"),
     }]
-  dict_list = {'list' : array}
+  dict_list = {'list': array}
   return JsonResponse(dict_list)
 
 
@@ -107,14 +116,14 @@ def prediction(request):
   array = []
   for list in countries['data']:
     array += [{
-      'country' : list['country'],
-      'cases' : list['cases'],
+      'country': list['country'],
+      'cases': list['cases'],
       'confirmed': list['confirmed'],
-      'deaths' : list['deaths'],
-      'recovered' : list['recovered'],
-      'datetime' : datetime.strptime(list['updated_at'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%d-%m-%Y"),
+      'deaths': list['deaths'],
+      'recovered': list['recovered'],
+      'datetime': datetime.strptime(list['updated_at'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%d-%m-%Y"),
     }]
-  dict_list = {'list' : array}
+  dict_list = {'list': array}
   ds_brazil = pd.DataFrame(array)
   X = ds_brazil.iloc[:, :-1].values
   y = ds_brazil.iloc[:, -1].values
@@ -170,46 +179,7 @@ def prediction(request):
 
   return JsonResponse(dict_list)
 
+
 def tweetSentmentAnalysis(request):
-  import tweepy
-  from textblob import TextBlob
-  from googletrans import Translator
-  from unidecode import unidecode
-
-  # Tokens de acesso
-  consumer_key = 'vrrwUB8yx0h6DD6wg3ohk6XXZ'
-  consumer_secret = 'h6zpmIKFUIaEV2RWKSQcpZBXJyInaLVHzroEiYwQ4Q7ueIoUH0'
-  access_token = '1691636144-pUKKIpkhv1jjpsctGM6diG7i9LugoofN1WV3YcG'
-  access_token_secret = 'qMyQdVRx8IFFzVnXrXgS37wOArig59eRe4S67p0epMz3S'
-  # Autenticando
-  auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-  auth.set_access_token(access_token, access_token_secret)
-  api = tweepy.API(auth, wait_on_rate_limit=True)
-  # Contadores
-  numPos = 0
-  numNeg = 0
-  total = 0
-  # Buscando tweets
-  for tweet in tweepy.Cursor(api.search, q="#covid-19", since='2020-02-22', lang="pt").items(10):
-    # Texto do Tweet
-    textPT = unidecode(tweet.text)
-    # Traduzindo para o Inglês
-    textEN = Translator().translate(textPT)
-    sentiment = TextBlob(textEN.text)
-    # Exibindo...
-    # print("[PT-BR] " + textPT)
-    # print("[EN]    " + textEN.text)
-    print("[Sent.] " + str(sentiment.polarity) + "\n")
-    # Estatísticas
-    total += 1
-    if sentiment.polarity > 0:
-      numPos += 1
-    elif sentiment.polarity < 0:
-      numNeg += 1
-
-  # Sentimento geral
-  mediaPos = numPos / total
-  mediaNeg = numNeg / total
-  print(total)
-  print('Porcentagem de comentários positivos: ' + str(mediaPos))
-  print('Porcentagem de comentários negativos: ' + str(mediaNeg))
+  array = serializers.serialize('json', Tweets.objects.all())
+  return HttpResponse(array, content_type='application/json')
