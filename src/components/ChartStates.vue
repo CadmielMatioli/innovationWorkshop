@@ -49,7 +49,7 @@
       this.renderChart({
         labels: self.states,
         datasets: [{
-          label: 'Gráfico de Usuários',
+          label: 'Gráfico de casos nos estados ',
           data: self.cases,
           backgroundColor: self.randomColor,
           datalabels: {
