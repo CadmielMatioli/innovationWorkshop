@@ -24,7 +24,7 @@
                       '#000',
                       '#f7f300',
                     ],
-                    data: [response.data.negative, response.data.neutral, response.data.positive]
+                    data: response.data.list
                   }
                 ]
               }, {responsive: true, maintainAspectRatio: false})
