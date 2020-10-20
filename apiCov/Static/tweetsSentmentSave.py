@@ -2,7 +2,6 @@ import tweepy
 from textblob import TextBlob
 from googletrans import Translator
 from unidecode import unidecode
-import sqlite3
 from sqlite3 import Error
 import psycopg2
 
@@ -38,7 +37,7 @@ for tweet in tweepy.Cursor(api.search, q="#covid-19", lang="pt").items():
     cur = con.cursor()
     try:
         print(cur)
-        cur.execute('INSERT INTO "apiCov_tweets" VALUES(default, ' + str(sentiment.polarity) + ')')
+        cur.execute('INSERT INTO "apiCov_tweets" VALUES(default,'+str(sentiment.polarity)+')')
         con.commit()
     except Error as e:
         print(e)

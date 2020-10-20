@@ -14,7 +14,6 @@
       mounted() {
         axios.get('/apicov/tweets/sentiment')
             .then(response => {
-              console.log(response.data.list[0].positive)
              this.renderChart({
                 labels: ['Triste %', 'Neutro %', 'Feliz %'],
                 datasets: [
