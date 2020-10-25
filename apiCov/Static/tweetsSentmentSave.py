@@ -23,6 +23,8 @@ for tweet in tweepy.Cursor(api.search, q="#covid-19", lang="pt").items():
     textPT = unidecode(tweet.text)
     textEN = Translator().translate(textPT)
     sentiment = TextBlob(textEN.text)
+
+
     total += 1
     if sentiment.polarity > 0:
         numPos += 1
@@ -30,6 +32,9 @@ for tweet in tweepy.Cursor(api.search, q="#covid-19", lang="pt").items():
         numNeg += 1
     elif sentiment.polarity == 0:
         numNeut += 1
+
+
+
 
     con = psycopg2.connect(host='ec2-54-157-88-70.compute-1.amazonaws.com', database='d6hm7bjvrr5aij',
                            user='wltwdpgyxxcivw',
@@ -44,8 +49,5 @@ for tweet in tweepy.Cursor(api.search, q="#covid-19", lang="pt").items():
     finally:
         if con:
             con.close()
-
-
-
 
 

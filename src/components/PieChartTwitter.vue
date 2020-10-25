@@ -20,9 +20,9 @@
                   {
                     labels:'Twitter',
                     backgroundColor: [
-                      '#fc0703',
-                      '#000',
-                      '#f7f300',
+                      '#' + Math.floor(Math.random() * 16777215).toString(16),
+                      '#' + Math.floor(Math.random() * 16777215).toString(16),
+                      '#' + Math.floor(Math.random() * 16777215).toString(16),
                     ],
                     data: [response.data.list[0].positive, response.data.list[0].neutral, response.data.list[0].negative]
                   }
