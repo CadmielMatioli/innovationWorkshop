@@ -94,10 +94,9 @@ def country(request, country):
 
 
 def prediction(request):
-    from django.shortcuts import render
     import requests
     from datetime import datetime
-    from django.http import JsonResponse, HttpResponse
+    from django.http import JsonResponse
     import pandas as pd
     import numpy as np
     from sklearn.model_selection import train_test_split
@@ -180,7 +179,6 @@ def prediction(request):
 
 
 def tweetSentmentAnalysis(request):
-
     positive = round(Tweets.objects.filter(sentiment__gt=0).count() * 100 / Tweets.objects.count(), 2)
     negative = round(Tweets.objects.filter(sentiment__lt=0).count() * 100 / Tweets.objects.count(), 2)
     neutral = round(Tweets.objects.filter(sentiment=0).count() * 100 / Tweets.objects.count(), 2)
@@ -190,7 +188,4 @@ def tweetSentmentAnalysis(request):
         'negative': negative
     }]
     dict_list = {'list': array}
-
-
-
     return JsonResponse(dict_list)
