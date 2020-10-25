@@ -1,12 +1,8 @@
-from django.core import serializers
-from django.shortcuts import render
 import requests
-from datetime import datetime
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from apiCov.models import Tweets
 from django.views.generic import TemplateView
 from django.views.decorators.cache import never_cache
-from django.db.models import Q, Avg
 
 index_view = never_cache(TemplateView.as_view(template_name='index.html'))
 
@@ -39,7 +35,7 @@ def state(request, state):
             'deaths': state['deaths'],
             'suspects': state['suspects'],
             'refuses': state['refuses'],
-            'datetime': list['datetime']
+            'datetime': state['datetime']
         }]
     dict_list = {'list': array}
     return JsonResponse(dict_list)
@@ -91,17 +87,16 @@ def country(request, country):
             'confirmed': country['data']['confirmed'],
             'deaths': country['data']['deaths'],
             'recovered': country['data']['recovered'],
-            'datetime': list['datetime']
+            'datetime': country['datetime']
         }]
     dict_list = {'list': array}
     return JsonResponse(dict_list)
 
 
 def prediction(request):
-    from django.shortcuts import render
     import requests
     from datetime import datetime
-    from django.http import JsonResponse, HttpResponse
+    from django.http import JsonResponse
     import pandas as pd
     import numpy as np
     from sklearn.model_selection import train_test_split
@@ -182,13 +177,15 @@ def prediction(request):
     return JsonResponse(dict_list)
 
 
+
 def tweetSentmentAnalysis(request):
     positive = round(Tweets.objects.filter(sentiment__gt=0).count() * 100 / Tweets.objects.count(), 2)
     negative = round(Tweets.objects.filter(sentiment__lt=0).count() * 100 / Tweets.objects.count(), 2)
     neutral = round(Tweets.objects.filter(sentiment=0).count() * 100 / Tweets.objects.count(), 2)
-    dict_list = {
+    array = [{
         'positive': positive,
         'neutral': neutral,
         'negative': negative
-    }
+    }]
+    dict_list = {'list': array}
     return JsonResponse(dict_list)
