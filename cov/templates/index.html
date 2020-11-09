@@ -1,9 +1,77 @@
 {% extends 'layout.html' %}
-{% load render_bundle from webpack_loader %}
 {% block body_block %}
-{% block content %}
-      <div id="app">
-      </div>
-    {% endblock %}
-    {% render_bundle 'app' %}
+    <main>
+        <section>
+            <div class="rad-body-wrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-xs-12">
+                            <div class="panel panel-default ">
+                                <div class="panel-heading" style="border:0" >
+                                    <h3 class=" mb-2  panel-title text-center  ">Selecione um Estado</h3>
+                                    <form method="GET">
+                                        <select class="form-control mt-2 " id="state"  name="state">
+                                            <option value="AC">Acre</option>
+                                            <option value="AL">Alagoas</option>
+                                            <option value="AP">Amapá</option>
+                                            <option value="AM">Amazonas</option>
+                                            <option value="BA">Bahia</option>
+                                            <option value="CE">Ceará</option>
+                                            <option value="DF">Distrito Federal</option>
+                                            <option value="ES">Espírito Santo</option>
+                                            <option value="GO">Goiás</option>
+                                            <option value="MA">Maranhão</option>
+                                            <option value="MT">Mato Grosso</option>
+                                            <option value="MS">Mato Grosso do Sul</option>
+                                            <option value="MG">Minas Gerais</option>
+                                            <option value="PA">Pará</option>
+                                            <option value="PB">Paraíba</option>
+                                            <option value="PR">Paraná</option>
+                                            <option value="PE">Pernambuco</option>
+                                            <option value="PI">Piauí</option>
+                                            <option value="RJ">Rio de Janeiro</option>
+                                            <option value="RN">Rio Grande do Norte</option>
+                                            <option value="RS">Rio Grande do Sul</option>
+                                            <option value="RO">Rondônia</option>
+                                            <option value="RR">Roraima</option>
+                                            <option value="SC">Santa Catarina</option>
+                                            <option value="SP">São Paulo</option>
+                                            <option value="SE">Sergipe</option>
+                                        </select>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-xs-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="border:0">
+                                    <h3 class="panel-title">Casos Confirmados x Casos Suspeitos</h3>
+                                </div>
+                                <canvas id="myChart" width="300" height="150"></canvas>
+                            </div>
+                        </div>
+                        <!-- here-->
+                        <div class="col-lg-8 col-md-6 col-xs-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="border:0">
+                                    <h3 class="panel-title text-center">DADOS EXTRAÍDOS POR ESTADOS</h3>
+                                </div>
+                                <canvas id="myChartHorizontal" width="300" height="73"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-xs-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="border:0">
+                                    <h3 class="panel-title text-center">casos confirmados em todos os estados</h3>
+                                </div>
+                                <canvas id="mixedChart" width="800" height="130"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 {% endblock %}

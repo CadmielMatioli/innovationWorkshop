@@ -1,6 +1,8 @@
 from django.urls import include, path
 from . import views
 
+app_name = 'apiCov'
+
 urlpatterns = [
     path('states/', views.states, name='states'),
     path('state/<str:state>', views.state, name='state'),
