@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class ApiCovConfig(AppConfig):
+class ApicovConfig(AppConfig):
     name = 'apiCov'

@@ -6,7 +6,6 @@ from django.http import JsonResponse
 def index(request):
     return render(request, 'index.html')
 
-
 def home(request):
     response = requests.get('https://covid19-brazil-api.now.sh/api/report/v1')
     states = response.json()
