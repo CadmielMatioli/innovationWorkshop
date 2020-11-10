@@ -19,7 +19,7 @@
               <header>
                     <nav class="rad-navigation">
                         <div class="rad-logo-container">
-                            <a href="/" class="rad-logo">Cov@19</a>
+                            <a href="{% url 'cov:countries' %}" class="rad-logo">Cov@19</a>
                             <a href="#" class="rad-toggle-btn pull-right"><i class="fa fa-bars"></i></a>
                         </div>
                     </nav>
@@ -28,7 +28,8 @@
         <aside>
             <nav class="rad-sidebar">
                 <ul>
-                    <li><a href="{% url 'cov:countries' %}" class="inbox"><i class="fa fa-dashboard"><span class="icon-bg rad-bg-success"></span></i><span class="rad-sidebar-item">Brasil</span></a></li><li><a id="other" href="/"><i class="fa fa-bar-chart-o"><span class="icon-bg rad-bg-danger"></span></i><span class="rad-sidebar-item">Estados</span></a></li>
+                    <li><a href="{% url 'cov:countries' %}" class="inbox"><i class="fa fa-dashboard"><span class="icon-bg rad-bg-success"></span></i><span class="rad-sidebar-item">Brasil</span></a></li>
+                    <li><a href="{% url 'cov:index' %}"><i class="fa fa-bar-chart-o"><span class="icon-bg rad-bg-danger"></span></i><span class="rad-sidebar-item">Estados</span></a></li>
                     <li><a href="{% url 'cov:twitter' %}" class="snooz"><i class="fa fa-line-chart"><span class="icon-bg rad-bg-primary"></span></i><span class="rad-sidebar-item">Redes Sociais</span></a></li>
                     <li><a href="{% url 'cov:prediction' %}" class="done"><i class="fa fa-area-chart"><span class="icon-bg rad-bg-warning"></span></i><span class="rad-sidebar-item">Predição</span></a></li>
                 </ul>
@@ -46,10 +47,8 @@
         <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.js'></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js'></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js'></script>
-        <script  src="{% static 'js/stateCharts.js' %}"></script>
-        <script  src="{% static 'js/countryChart.js' %}"></script>
         <script  src="{% static 'js/script.js' %}"></script>
-        <script  src="{% static 'js/prediction.js' %}"></script>
-        <script  src="{% static 'js/twitter.js' %}"></script>
+        {% block js %}
+        {% endblock %}
     </body>
 </html>
