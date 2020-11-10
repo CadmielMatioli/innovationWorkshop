@@ -9,3 +9,7 @@ def index(request):
 
 def prediction(request):
     return render(request, 'prediction.html')
+
+
+def twitter(request):
+    return render(request, 'twiiter.html')

@@ -8,4 +8,5 @@ app_name = 'cov'
 urlpatterns = [
     path('', views.index, name='index'),
     path('prediction', views.prediction, name='prediction'),
+    path('twitter', views.twitter, name='twitter'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
