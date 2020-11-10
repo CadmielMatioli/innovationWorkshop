@@ -13,3 +13,7 @@ def prediction(request):
 
 def twitter(request):
     return render(request, 'twiiter.html')
+
+
+def countries(request):
+    return render(request, 'country.html')
