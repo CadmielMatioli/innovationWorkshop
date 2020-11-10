@@ -5,7 +5,6 @@ $.ajax({
     type: "GET",
     url: url,
     success:function (response){
-        console.log(response.list[0].positive)
         new Chart(chart, {
             type: 'pie',
             data: {

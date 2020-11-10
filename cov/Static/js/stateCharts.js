@@ -11,7 +11,6 @@ $.getJSON(url, function (data) {
         }
         html += '<option value="' + val.uf + '">' + val.state + '</option>';
     });
-
     $('#state').html(html);
 });
 

@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from apiCov.models import Tweets
 from django.views.generic import TemplateView
 from django.views.decorators.cache import never_cache
-
+from googletrans import Translator
 index_view = never_cache(TemplateView.as_view(template_name='index.html'))
 
 
@@ -64,6 +64,7 @@ def countries(request):
     response = requests.get('https://covid19-brazil-api.now.sh/api/report/v1/countries')
     countries = response.json()
     array = []
+    translator = Translator()
     for list in countries['data']:
         array += [{
             'country': list['country'],
@@ -81,6 +82,7 @@ def country(request, country):
     response = requests.get('https://covid19-brazil-api.now.sh/api/report/v1/' + country + '')
     country = response.json()
     array = []
+    translator = Translator()
     for list in country:
         array = [{
             'country': country['data']['country'],
