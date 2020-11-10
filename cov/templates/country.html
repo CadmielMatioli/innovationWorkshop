@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block body_block %}
-    <main>
+     <main>
         <section>
             <div class="rad-body-wrapper">
                 <div class="container-fluid">
@@ -8,11 +8,11 @@
                         <div class="col-lg-12 col-md-12 col-xs-12">
                             <div class="panel panel-default ">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title text-center">Selecione um Estado</h3>
+                                    <h3 class="panel-title text-center">Selecione um país</h3>
                                 </div>
                                 <div class="panel-body">
                                     <form method="GET">
-                                        <select class="form-control mt-2 " id="state" data-url="{% url 'apiCov:states' %}"  name="state"></select>
+                                        <select class="form-control mt-2 " id="country" data-url="{% url 'apiCov:countries' %}"></select>
                                     </form>
                                 </div>
                             </div>
@@ -20,17 +20,17 @@
                         <div class="col-lg-4 col-md-12 col-xs-12">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title text-center chart-title"></h3>
+                                    <h3 class="panel-title text-center chart-title-country"></h3>
                                 </div>
-                                <canvas id="myChart" width="300" height="150"></canvas>
+                                <canvas id="pie-chart-country" width="300" height="150"></canvas>
                             </div>
                         </div>
                         <div class="col-lg-8 col-md-6 col-xs-12">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title text-center chart-title"></h3>
+                                    <h3 class="panel-title text-center chart-title-country"></h3>
                                 </div>
-                                <canvas id="myChartHorizontal" width="300" height="73"></canvas>
+                                <canvas id="line-chart-country" width="300" height="73"></canvas>
                             </div>
                         </div>
                     </div>
@@ -38,9 +38,15 @@
                         <div class="col-lg-12 col-md-12 col-xs-12">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title text-center">casos confirmados em todos os estados</h3>
+                                    <h3 class="panel-title text-center">casos confirmados em todos os paises</h3>
                                 </div>
-                                <canvas id="mixedChart" width="800" height="130"></canvas>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-12 text-center">
+                                            <canvas id="countries-chart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

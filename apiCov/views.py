@@ -14,6 +14,7 @@ def states(request):
     for list in states['data']:
         array += [{
             'state': list['state'],
+            'uf': list['uf'],
             'cases': list['cases'],
             'deaths': list['deaths'],
             'suspects': list['suspects'],
@@ -70,7 +71,7 @@ def countries(request):
             'confirmed': list['confirmed'],
             'deaths': list['deaths'],
             'recovered': list['recovered'],
-            'datetime': list['datetime']
+            'datetime': list['updated_at']
         }]
     dict_list = {'list': array}
     return JsonResponse(dict_list)
@@ -87,7 +88,7 @@ def country(request, country):
             'confirmed': country['data']['confirmed'],
             'deaths': country['data']['deaths'],
             'recovered': country['data']['recovered'],
-            'datetime': country['datetime']
+            'datetime': country['data']['updated_at']
         }]
     dict_list = {'list': array}
     return JsonResponse(dict_list)

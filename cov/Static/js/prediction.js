@@ -75,25 +75,21 @@ $.ajax({
                     {
                         label: 'Y',
                         data: y,
-                        // backgroundColor: color_y,
                         borderColor: backgroundColor_y,
                     },
                     {
                         label: 'Linear',
                         data: y_pred_linear,
-                        // backgroundColor: color,
                         borderColor: y_pred_linear_color,
                     },
                     {
                         label: 'Minimo',
                         data: y_pred_min,
-                        // backgroundColor: color,
                         borderColor: y_pred_min_color,
                     },
                     {
                         label: 'Máximo',
                         data: y_pred_max,
-                        // backgroundColor: color,
                         borderColor: y_pred_max_color,
                     }
                 ],
