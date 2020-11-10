@@ -120,16 +120,6 @@ def prediction(request):
     ds_countries = pd.read_csv('Datasets.csv')
     dates = ds_countries['Date']
     date_format = [pd.to_datetime(d) for d in dates]
-    variable = 'Cases'
-    fig, ax = plt.subplots(figsize=(12, 5))
-    # ax.grid()
-    # ax.scatter(date_format, ds_countries[variable])
-    # ax.set(xlabel="Date", ylabel=variable, title=variable)
-    # date_form = DateFormatter("%d-%m-%Y")
-    # ax.xaxis.set_major_formatter(date_form)
-    # ax.xaxis.set_major_locator(mdates.DayLocator(interval=90))
-    # fig.savefig(variable + '.png')
-    # plt.show()
     X = date_format
     y = ds_countries['Cases'].tolist()[1:]
     starting_date = len(X) - 200
@@ -157,7 +147,7 @@ def prediction(request):
         date_zero = datetime.strptime(ds_countries['Date'][starting_date], '%Y-%m-%dT%H:%M:%SZ')
         date_prev = []
         x_ticks = []
-        step = 30
+        step = 45
         data_curr = date_zero
         x_current = starting_date
         n = int(future_days / step)
@@ -166,34 +156,49 @@ def prediction(request):
             x_ticks.append(x_current)
             data_curr = data_curr + timedelta(days=step)
             x_current = x_current + step
-    # plt.grid()
-    # plt.scatter(X, y)
-    # plt.plot(X_test, y_pred_linear, color='black', linewidth=2)
-    # plt.plot(X_test, y_pred_max, color='red', linewidth=1, linestyle='dashed')
-    # plt.plot(X_test, y_pred_min, color='green', linewidth=1, linestyle='dashed')
-    # plt.xlabel('Dias')
-    # plt.xlim(starting_date, starting_date + future_days)
-    # plt.xticks(x_ticks, date_prev)
-    # plt.ylabel('Casos')
-    # plt.yscale("log")
-    # plt.savefig("prediction.png")
-    # plt.show()
+    plt.grid()
+    plt.scatter(X, y, color='blue')
+    plt.plot(X_test, y_pred_linear, color='black', linewidth=2)
+    plt.plot(X_test, y_pred_max, color='red', linewidth=1, linestyle='dashed')
+    plt.plot(X_test, y_pred_min, color='green', linewidth=1, linestyle='dashed')
+    plt.xlabel('Dias')
+    plt.xlim(starting_date, starting_date + future_days)
+    plt.xticks(x_ticks, date_prev)
+    plt.ylabel('Casos')
+    plt.yscale("log")
+    plt.gca().set_facecolor('#2c314a')
+    plt.savefig('cov/Static/prediction.png')
     value_x = []
+    value_x_test = []
+    value_y_pred_linear = []
+    value_y_pred_max = []
+    value_y_pred_min = []
     for idx, val in enumerate(X):
-        print(X[idx][0])
         value_x += [X[idx][0]]
+
+    for idx, val in enumerate(X_test):
+        value_x_test += [X_test[idx][0]]
+
+    for i, val in enumerate(y_pred_linear):
+        value_y_pred_linear += [int(val)]
+
+    for i, val in enumerate(y_pred_max):
+        value_y_pred_max += [int(val)]
+
+    for i, val in enumerate(y_pred_min):
+        value_y_pred_min += [int(val)]
+
     array = [{
         'X': value_x,
         'y': y,
         'x_ticks': x_ticks,
-        # 'date_prev': date_prev,
-        # 'X_test': X_test,
-        # 'y_pred_linear': y_pred_linear,
-        # 'y_pred_max': y_pred_max,
-        # 'y_pred_max': y_pred_min,
+        'date_prev': date_prev,
+        'X_test': value_x_test,
+        'y_pred_linear': value_y_pred_linear,
+        'y_pred_max': value_y_pred_max,
+        'y_pred_min': value_y_pred_min,
     }]
     dict_list = {"list": array}
-    print(dict_list)
     return JsonResponse(dict_list)
 
 
