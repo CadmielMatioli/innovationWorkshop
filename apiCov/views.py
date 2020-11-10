@@ -95,87 +95,111 @@ def country(request, country):
 
 def prediction(request):
     import requests
-    from datetime import datetime
     from django.http import JsonResponse
     import pandas as pd
-    import numpy as np
-    from sklearn.model_selection import train_test_split
-    from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier, plot_tree
-    from sklearn.neighbors import KNeighborsRegressor, KNeighborsClassifier
-    from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
-    from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error, accuracy_score, confusion_matrix
-    from sklearn.impute import SimpleImputer
-    from sklearn.compose import ColumnTransformer
-    from sklearn.preprocessing import OneHotEncoder, LabelEncoder
     import matplotlib.pyplot as plt
-    response = requests.get('https://covid19-brazil-api.now.sh/api/report/v1/countries')
+    from matplotlib.dates import DateFormatter
+    import matplotlib.dates as mdates
+    from sklearn import linear_model
+    from sklearn.metrics import max_error
+    from datetime import datetime, timedelta
+
+    response = requests.get('https://api.covid19api.com/dayone/country/brazil/status/confirmed')
     countries = response.json()
     array = []
-    for list in countries['data']:
+    for list in countries:
         array += [{
-            'country': list['country'],
-            'cases': list['cases'],
-            'confirmed': list['confirmed'],
-            'deaths': list['deaths'],
-            'recovered': list['recovered'],
-            'datetime': datetime.strptime(list['updated_at'], '%Y-%m-%dT%H:%M:%S.%f%z').strftime("%d-%m-%Y"),
+            'cases': list['Cases'],
+            'Date': list['Date'],
         }]
-    dict_list = {'list': array}
-    ds_brazil = pd.DataFrame(array)
-    X = ds_brazil.iloc[:, :-1].values
-    y = ds_brazil.iloc[:, -1].values
+    dataset = pd.DataFrame(array)
+    dataset.columns = ['Cases', 'Date']
+    dataset.dropna(axis=0, how='any', inplace=True)
+    dataset.index = pd.RangeIndex(len(dataset.index))
+    dataset.to_csv("Datasets.csv", index=False)
+    ds_countries = pd.read_csv('Datasets.csv')
+    dates = ds_countries['Date']
+    date_format = [pd.to_datetime(d) for d in dates]
+    X = date_format
+    y = ds_countries['Cases'].tolist()[1:]
+    starting_date = len(X) - 200
+    day_numbers = []
+    for i in range(1, len(X)):
+        day_numbers.append([i])
+    X = day_numbers
+    X = X[starting_date:]
+    y = y[starting_date:]
+    linear_regr = linear_model.LinearRegression()
+    linear_regr.fit(X, y)
+    print("Linear Regression Model Score: %s" % (linear_regr.score(X, y)))
+    y_pred = linear_regr.predict(X)
+    error = max_error(y, y_pred)
+    X_test = []
+    future_days = len(X) + 365
+    for i in range(starting_date, starting_date + future_days):
+        X_test.append([i])
+    y_pred_linear = linear_regr.predict(X_test)
+    y_pred_max = []
+    y_pred_min = []
+    for i in range(0, len(y_pred_linear)):
+        y_pred_max.append(y_pred_linear[i] + error)
+        y_pred_min.append(y_pred_linear[i] - error)
+        date_zero = datetime.strptime(ds_countries['Date'][starting_date], '%Y-%m-%dT%H:%M:%SZ')
+        date_prev = []
+        x_ticks = []
+        step = 45
+        data_curr = date_zero
+        x_current = starting_date
+        n = int(future_days / step)
+        for i in range(0, n):
+            date_prev.append(str(data_curr.day) + "/" + str(data_curr.month))
+            x_ticks.append(x_current)
+            data_curr = data_curr + timedelta(days=step)
+            x_current = x_current + step
+    plt.grid()
+    plt.scatter(X, y, color='blue')
+    plt.plot(X_test, y_pred_linear, color='black', linewidth=2)
+    plt.plot(X_test, y_pred_max, color='red', linewidth=1, linestyle='dashed')
+    plt.plot(X_test, y_pred_min, color='green', linewidth=1, linestyle='dashed')
+    plt.xlabel('Dias')
+    plt.xlim(starting_date, starting_date + future_days)
+    plt.xticks(x_ticks, date_prev)
+    plt.ylabel('Casos')
+    plt.yscale("log")
+    plt.gca().set_facecolor('#2c314a')
+    plt.savefig('cov/Static/prediction.png')
+    value_x = []
+    value_x_test = []
+    value_y_pred_linear = []
+    value_y_pred_max = []
+    value_y_pred_min = []
+    for idx, val in enumerate(X):
+        value_x += [X[idx][0]]
 
-    ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [0])], remainder='passthrough')
-    X = np.array(ct.fit_transform(X))
+    for idx, val in enumerate(X_test):
+        value_x_test += [X_test[idx][0]]
 
-    labelencoder = LabelEncoder()
-    y = labelencoder.fit_transform(y)
+    for i, val in enumerate(y_pred_linear):
+        value_y_pred_linear += [int(val)]
 
-    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+    for i, val in enumerate(y_pred_max):
+        value_y_pred_max += [int(val)]
 
-    imputer.fit(X[:, :5])
+    for i, val in enumerate(y_pred_min):
+        value_y_pred_min += [int(val)]
 
-    X[:, :5] = imputer.transform(X[:, :5])
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=0)
-    knn = KNeighborsRegressor()
-    arvore = DecisionTreeRegressor()
-    rf = RandomForestRegressor()
-
-    knn.fit(X_train, y_train)
-    arvore.fit(X_train, y_train)
-    rf.fit(X_train, y_train)
-
-    y_pred_knn = knn.predict(X_test)
-    y_pred_arvore = arvore.predict(X_test)
-    y_pred_rf = rf.predict(X_test)
-
-    arvore.fit(X_train, y_train)
-    plt.figure(figsize=(10, 10))
-
-    # a = plot_tree(arvore,
-    #               feature_names=ct.get_feature_names(),
-    #               class_names=['0', '1'],
-    #               filled=True,
-    #               rounded=True,
-    #               fontsize=14
-    #               )
-    plt.show()
-    plt.savefig("3.png")
-    print(arvore.feature_importances_)
-
-    print(X_test[:, :-1])
-    print(arvore.predict(X_test[:, :-1]))
-    y_pred = arvore.predict(X_test)
-    labels = list(ds_brazil.target_names)
-    cm = confusion_matrix(y_test, y_pred)
-
-    cm_visualizar = pd.DataFrame(cm, index=labels, columns=labels)
-    print(accuracy_score(y_test, y_pred))
-
+    array = [{
+        'X': value_x,
+        'y': y,
+        'x_ticks': x_ticks,
+        'date_prev': date_prev,
+        'X_test': value_x_test,
+        'y_pred_linear': value_y_pred_linear,
+        'y_pred_max': value_y_pred_max,
+        'y_pred_min': value_y_pred_min,
+    }]
+    dict_list = {"list": array}
     return JsonResponse(dict_list)
-
 
 
 def tweetSentmentAnalysis(request):
