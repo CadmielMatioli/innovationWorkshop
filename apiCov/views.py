@@ -150,12 +150,12 @@ def prediction(request):
         date_zero = datetime.strptime(ds_countries['Date'][starting_date], '%Y-%m-%dT%H:%M:%SZ')
         date_prev = []
         x_ticks = []
-        step = 45
+        step = 90
         data_curr = date_zero
         x_current = starting_date
         n = int(future_days / step)
         for i in range(0, n):
-            date_prev.append(str(data_curr.day) + "/" + str(data_curr.month))
+            date_prev.append(str(data_curr.day)+"-"+str(data_curr.month)+"-"+ str(data_curr.year)[-2:])
             x_ticks.append(x_current)
             data_curr = data_curr + timedelta(days=step)
             x_current = x_current + step
