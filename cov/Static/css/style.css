@@ -154,7 +154,7 @@ a:hover {
 .rad-sidebar {
   z-index: 9999;
   position: fixed;
-  background: #2c314a;
+  background: rgba(42, 47, 71, 1);
   width: 225px;
   height: 100vh;
   top: 50px;
@@ -198,7 +198,7 @@ a:hover {
 }
 
 .rad-sidebar li:hover {
-  background: #1f1fff;
+  background: #303654;
 }
 
 .rad-sidebar li:hover .icon-bg {
@@ -236,7 +236,19 @@ a:hover {
 }
 
 .rad-bg-violet {
-  background: #6A55C2;
+  background: rgb(121, 75, 196);
+}
+
+.rad-bg-countries {
+  background: rgba(54, 162, 235, 0.2);
+}
+
+.rad-bg-twitter {
+  background: rgba(29,161,242,1.00);
+}
+
+.rad-bg-states {
+  background: #ff6384;
 }
 
 .rad-sidebar.rad-nav-min {
