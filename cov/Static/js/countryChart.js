@@ -4,12 +4,14 @@ $.getJSON(url, function (data) {
     var html = '<option value="" selected>Selecione um Pais</option>';
     $(data.list).each(function (index, val) {
         if(val.country == 'Brazil'){
+            chartLineDays(val.country)
             html += '<option value="' + val.country + '" selected>' + val.country + '</option>';
             chartPie(val.confirmed, val.recovered, val.deaths)
             chartLine(val.confirmed, val.refuses, val.deaths, val.cases)
             chartTitle.html(val.country)
+        }else{
+            html += '<option value="' + val.country + '">' + val.country + '</option>';
         }
-        html += '<option value="' + val.country + '">' + val.country + '</option>';
     });
 
     $('#country').html(html);
@@ -21,6 +23,7 @@ var url = '/apicov/country/' + $(this).val()
         url: url,
         type:'GET',
         success:function(response){
+            chartLineDays(response.list[0].country)
             chartTitle.html(response.list[0].country)
             chartPie(response.list[0].confirmed, response.list[0].recovered, response.list[0].deaths)
             chartLine(response.list[0].confirmed, response.list[0].recovered, response.list[0].deaths, response.list[0].cases)
@@ -38,34 +41,18 @@ function chartPie(confirmed, recovered, deaths){
                     label: 'Dados extraídos por país',
                     data: [confirmed, recovered, deaths],
                       backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
+                        'rgba(59, 179, 91, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
                     ],
                     borderColor: [
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(59, 179, 91, 0.2)',
                         'rgba(255, 99, 132, 0.5)',
-                        'rgba(245, 66, 239, 0.5)',
-                        'rgba(255, 206, 86, 0.5)',
-                        'rgba(75, 192, 192, 0.5)',
-                        'rgba(153, 102, 255, 0.5)',
-                        'rgba(255, 159, 64, 0.5)'
                     ],
                 }],
 
             },
-        options: {
-            scales: {
-                xAxes: [{
-                    stacked: true
-                }],
-                yAxes: [{
-                    stacked: true
-                }]
-            }
-        }
     });
 }
 
@@ -122,7 +109,6 @@ $.get('/apicov/countries/', function(array) {
     for (let i in data) {
         states.push(data[i].country);
         cases.push(data[i].cases);
-        borderColor[i] = 'rgba('+Math.floor(Math.random()*255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+''+ ', 0.5)';
         backgroundColor[i] = 'rgba('+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+', '+Math.floor(Math.random() * 255)+''+ ', 0.2)';
     }
     var ctx = document.getElementById('countries-chart');
@@ -134,13 +120,63 @@ $.get('/apicov/countries/', function(array) {
                 label: 'Casos',
                 data: cases,
                 backgroundColor: backgroundColor,
-                borderColor: borderColor,
+                borderColor: backgroundColor,
                 borderWidth: 1
             }]
         },
     });
 });
 
+function chartLineDays(country){
+    var url = $('#line-chart-country-days').data('url')
+    var country_confirmed = new Array();
+    var country_date = new Array();
+    var background_color = new Array();
+    var borderColor = new Array();
+    $.ajax({
+        type:'GET',
+        url:url,
+        data: {country:country},
+        success:function(response){
+            $.each(response.list, function(index, i){
+                country_confirmed[index] = i.Confirmed
+                country_date[index] = i.Date
+                background_color[index] =  'rgba(54, 162, 235, 0.2)';
+                borderColor[index] = 'rgba(255, 99, 132, 1)';
+            });
+            var ctx = $('#line-chart-country-days')[0].getContext('2d')
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: country_date,
+                    datasets: [{
+                        label: 'Dados extraídos por país',
+                        data: country_confirmed,
+                        backgroundColor: background_color,
+                        borderColor: borderColor,
+                        labels: ['Red']
+                    }],
+                    borderWidth: 1
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            stacked: true
+                        }],
+                        yAxes: [{
+                            stacked: true,
+                            ticks: {
+                                max: 10000000,
+                                min: 0,
+                                stepSize: 1000000
+                            }
+                        }],
+                    },
+                }
+            });
+        }
+    });
+}
  Chart.plugins.register({
     beforeDraw: function(chartInstance) {
     var ctx = chartInstance.chart.ctx;
