@@ -11,4 +11,6 @@ urlpatterns = [
     path('country/<str:country>', views.country, name='country'),
     path('prediction/', views.prediction, name='prediction'),
     path('tweets/sentiment/', views.tweetSentmentAnalysis, name='tweets'),
+    path('brazil/days', views.stateDays, name='stateDays'),
+    path('days/country', views.countryDays, name='countryDays'),
 ]

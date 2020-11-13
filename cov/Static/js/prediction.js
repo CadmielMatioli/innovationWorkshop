@@ -26,7 +26,6 @@ $('#image-pred').hide()
 $.ajax({
     type:'GET',
     url:url,
-
     success: function(response){
         var data = response.list[0];
         $.each(data.X, function(index, i){
@@ -63,14 +62,14 @@ $.ajax({
             y_pred_max_color[index] = 'rgba(255, 0, 51)'
         })
 
-        $.each(data.date_prev, function(index, i){
+        $.each(response.array_date, function(index, i){
             value_date_prev[index] = i;
         })
 
         new Chart(chartPred, {
             type: 'line',
             data: {
-                labels: value_x_test,
+                labels: value_date_prev,
                 datasets: [
                     {
                         label: 'Y',
@@ -106,6 +105,7 @@ $.ajax({
                 }
             }
         });
+        $('#title-chart-pred').html('Dados da predição do dia '+ response.array_date[0]  +' até ' + response.array_date[response.array_date.length-1])
         $('#image-pred').attr('src', $('#image-pred').data('src'))
         $('#image-pred').show()
         $('#messageGenetingPdf').hide()
