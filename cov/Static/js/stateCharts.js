@@ -23,6 +23,7 @@ var url = '/apicov/state/' + $(this).val()
         url: url,
         type:'GET',
         success:function(response){
+            resetCanvasChart()
             chartTitle.html(response.list[0].state)
             chartLineDaysState(response.list[0].uf)
             chartPie(response.list[0].suspects, response.list[0].refuses, response.list[0].deaths)
@@ -177,6 +178,17 @@ function chartLineDaysState(uf){
             var casosChart = new Chart(ctx, config);
         },
     });
+}
+
+function resetCanvasChart(){
+    $('#myChart').remove()
+    $('#myChartHorizontal').remove()
+    var lineChartDays = $('#line-chart-state-date')
+    var urlchart =  lineChartDays.data('url')
+    lineChartDays.remove()
+    $('#graph-container-pie').html('<canvas id="myChart" width="300" height="150"></canvas>')
+    $('#graph-container-line').html('<canvas id="myChartHorizontal" width="300" height="150"></canvas>')
+    $('#graph-container-line-chart-state-date').html('<canvas id="line-chart-state-date" width="300" height="73" data-url='+urlchart+'></canvas>')
 }
 
 

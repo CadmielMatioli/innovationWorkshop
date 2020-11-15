@@ -23,6 +23,7 @@ var url = '/apicov/country/' + $(this).val()
         url: url,
         type:'GET',
         success:function(response){
+            resetCanvasChart()
             chartLineDays(response.list[0].country)
             chartTitle.html(response.list[0].country)
             chartPie(response.list[0].confirmed, response.list[0].recovered, response.list[0].deaths)
@@ -33,7 +34,7 @@ var url = '/apicov/country/' + $(this).val()
 
 function chartPie(confirmed, recovered, deaths){
     var ctx = $('#pie-chart-country')[0].getContext('2d')
-    new Chart(ctx, {
+    var testChart = new Chart(ctx, {
         type: 'pie',
         data: {
                 labels: ['Casos Confirmados','Recuperados ','Mortes'],
@@ -54,6 +55,17 @@ function chartPie(confirmed, recovered, deaths){
 
             },
     });
+}
+
+function resetCanvasChart(){
+    $('#pie-chart-country').remove()
+    $('#line-chart-country').remove()
+    var lineChartDays = $('#line-chart-country-days')
+    var urlchart =  lineChartDays.data('url')
+    lineChartDays.remove()
+    $('#graph-container-pie').html('<canvas id="pie-chart-country" width="300" height="150"></canvas>')
+    $('#graph-container-line').html('<canvas id="line-chart-country" width="300" height="150"></canvas>')
+    $('#graph-container-line-chart-country-days').html('<canvas id="line-chart-country-days" width="300" height="73" data-url='+ urlchart+ '></canvas>')
 }
 
 function chartLine(confirmed, recovered, deaths, cases){
