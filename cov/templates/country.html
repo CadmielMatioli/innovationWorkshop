@@ -24,7 +24,9 @@
                                     <h3 class="panel-title text-center chart-title-country"></h3>
                                 </div>
                                 <div class="panel-body">
-                                    <canvas id="pie-chart-country" width="300" height="150"></canvas>
+                                    <div id="graph-container-pie">
+                                        <canvas id="pie-chart-country" width="300" height="150"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -34,7 +36,9 @@
                                     <h3 class="panel-title text-center chart-title-country"></h3>
                                 </div>
                                 <div class="panel-body">
-                                    <canvas id="line-chart-country" width="300" height="150"></canvas>
+                                    <div id="graph-container-line">
+                                        <canvas id="line-chart-country" width="300" height="150"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -44,7 +48,9 @@
                                     <h3 class="panel-title text-center chart-title-country"></h3>
                                 </div>
                                 <div class="panel-body">
-                                    <canvas id="line-chart-country-days" width="300" height="73" data-url="{% url 'apiCov:countryDays' %}"></canvas>
+                                    <div id="graph-container-line-chart-country-days">
+                                        <canvas id="line-chart-country-days" width="300" height="73" data-url="{% url 'apiCov:countryDays' %}"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
