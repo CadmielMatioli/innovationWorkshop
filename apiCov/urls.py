@@ -13,4 +13,5 @@ urlpatterns = [
     path('tweets/sentiment/', views.tweetSentmentAnalysis, name='tweets'),
     path('brazil/days', views.stateDays, name='stateDays'),
     path('days/country', views.countryDays, name='countryDays'),
+    path('image-pred', views.imagePred, name='imagePred'),
 ]

@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from django.views.decorators.cache import never_cache
 from googletrans import Translator
 from datetime import datetime, timedelta
+
 index_view = never_cache(TemplateView.as_view(template_name='index.html'))
 
 
@@ -159,7 +160,7 @@ def prediction(request):
         x_current = starting_date
         n = int(future_days / step)
         for i in range(0, n):
-            date_prev.append(str(data_curr.day)+"-"+str(data_curr.month)+"-"+ str(data_curr.year)[-2:])
+            date_prev.append(str(data_curr.day) + "-" + str(data_curr.month) + "-" + str(data_curr.year)[-2:])
             x_ticks.append(x_current)
             data_curr = data_curr + timedelta(days=step)
             x_current = x_current + step
@@ -254,6 +255,7 @@ def stateDays(request):
     dict_list = {'list': array}
     return JsonResponse(dict_list)
 
+
 def countryDays(request):
     import requests
     from datetime import datetime, timedelta
@@ -261,7 +263,8 @@ def countryDays(request):
     value = datetime.today() - timedelta(days=15)
     dateBefore = value.strftime('%Y-%m-%dT%H:%M:%SZ')
     dateAfter = datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ')
-    response = requests.get('https://api.covid19api.com/country/'+request.GET.get('country')+'?from='+dateBefore+'&to='+dateAfter+'')
+    response = requests.get('https://api.covid19api.com/country/' + request.GET.get(
+        'country') + '?from=' + dateBefore + '&to=' + dateAfter + '')
     country = response.json()
     array = []
 
@@ -272,4 +275,9 @@ def countryDays(request):
             'Country': list['Country'],
         }]
     dict_list = {'list': array}
+    return JsonResponse(dict_list)
+
+
+def imagePred(request):
+    dict_list = {'list': request.get_host() + '/static/prediction.png'}
     return JsonResponse(dict_list)
